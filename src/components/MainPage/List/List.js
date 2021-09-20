@@ -15,8 +15,11 @@ const useStyles = makeStyles((theme) => ({
 		width: '600px',
 		maxHeight: '90vh',
 		flexDirection: 'column',
-		overflow: 'scroll',
+		overflowY: 'scroll',
 		paddingTop: 0,
+		'&::-webkit-scrollbar': {
+			width: '0',
+		},
 	},
 	header: {
 		backgroundColor: '#ddd',
