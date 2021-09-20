@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import cn from 'classnames';
 import { makeStyles } from '@material-ui/styles';
 import { Box, Button, TextField } from '@material-ui/core';
@@ -6,6 +7,7 @@ import { LocalizationProvider } from '@mui/lab';
 import DateAdapter from '@mui/lab/AdapterDayjs';
 import { DateTimePicker } from '@mui/lab';
 
+import { CLOSE_CREATE_FORM } from '../../../constants/action';
 import { DATE_FORMAT } from '../../../constants/date';
 import { GUTTER } from '../../../constants/style';
 
@@ -21,11 +23,18 @@ const useStyles = makeStyles((theme) => ({
 			},
 		},
 	},
+	buttonGroup: {
+		display: 'flex',
+		'& > *:not(:last-child)': {
+			marginRight: '10px',
+		},
+	},
 }));
 
-const MainPage = (props) => {
+const Form = (props) => {
 	const classes = useStyles();
-	const { columnStyle, createTodo } = props;
+	const dispatch = useDispatch();
+	const { columnStyle, createTodo, createFormOpen } = props;
 
 	// form
 	const [whatToDo, setWhatToDo] = useState('');
@@ -40,9 +49,16 @@ const MainPage = (props) => {
 		try {
 			await createTodo(params);
 			setWhatToDo('');
+			handleCloseCreateForm();
 		} catch (error) {
 			console.error(error);
 		}
+	};
+
+	const handleCloseCreateForm = () => {
+		dispatch({
+			type: CLOSE_CREATE_FORM,
+		});
 	};
 
 	return (
@@ -50,6 +66,7 @@ const MainPage = (props) => {
 			className={cn(columnStyle, classes.form)}
 			component="form"
 			onSubmit={handleSubmit}
+			style={{ visibility: !createFormOpen && 'hidden' }}
 		>
 			<TextField
 				required
@@ -72,11 +89,21 @@ const MainPage = (props) => {
 					renderInput={(params) => <TextField {...params} variant="outlined" />}
 				/>
 			</LocalizationProvider>
-			<Button fullWidth variant="contained" color="primary" type="submit">
-				新增
-			</Button>
+			<Box className={classes.buttonGroup}>
+				<Button
+					fullWidth
+					variant="contained"
+					color="secondary"
+					onClick={handleCloseCreateForm}
+				>
+					關閉
+				</Button>
+				<Button fullWidth variant="contained" color="primary" type="submit">
+					新增
+				</Button>
+			</Box>
 		</Box>
 	);
 };
 
-export default MainPage;
+export default Form;

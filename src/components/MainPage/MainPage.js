@@ -11,10 +11,9 @@ import { GUTTER, BORDER_RADIUS } from '../../constants/style';
 
 const useStyles = makeStyles((theme) => ({
 	container: {
-		// backgroundColor: '#faa',
 		display: 'flex',
 		width: '1300px',
-		margin: '50px auto',
+		margin: '50px auto 0',
 		justifyContent: 'center',
 		alignItems: 'flex-start',
 	},
@@ -36,6 +35,7 @@ const MainPage = (props) => {
 	const history = useHistory();
 	const isLogin = useSelector((state) => state.auth.isLogin);
 	const user = useSelector((state) => state.auth.user);
+	const createFormOpen = useSelector((state) => state.createForm.open);
 	const { isWaiting, handleSignOut, list, createTodo, editTodo } = props;
 
 	useEffect(() => {
@@ -51,9 +51,11 @@ const MainPage = (props) => {
 					handleSignOut={handleSignOut}
 				/>
 				<List columnStyle={classes.column} list={list} editTodo={editTodo} />
-				{!false && (
-					<Form columnStyle={classes.column} createTodo={createTodo} />
-				)}
+				<Form
+					columnStyle={classes.column}
+					createTodo={createTodo}
+					createFormOpen={createFormOpen}
+				/>
 			</Box>
 			<Backdrop
 				sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}

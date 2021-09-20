@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-const MainPage = (props) => {
+const UserInfo = (props) => {
 	const classes = useStyles();
 	const { columnStyle, user, handleSignOut } = props;
 
@@ -25,4 +25,4 @@ const MainPage = (props) => {
 	);
 };
 
-export default MainPage;
+export default UserInfo;
