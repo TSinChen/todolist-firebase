@@ -1,102 +1,42 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
-import querystring from 'query-string';
-import cn from 'classnames';
-import dayjs from 'dayjs';
 import { makeStyles } from '@material-ui/styles';
-import {
-	Backdrop,
-	Box,
-	Button,
-	CircularProgress,
-	TextField,
-} from '@material-ui/core';
-import { LocalizationProvider } from '@mui/lab';
-import DateAdapter from '@mui/lab/AdapterDayjs';
-import { DateTimePicker } from '@mui/lab';
+import { Backdrop, Box, CircularProgress } from '@material-ui/core';
+
+import UserInfo from './UserInfo/UserInfo';
+import List from './List/List';
+import Form from './Form/Form';
+import { GUTTER } from '../../constants/style';
 
 const useStyles = makeStyles((theme) => ({
 	container: {
+		// backgroundColor: '#faa',
 		display: 'flex',
+		width: '1400px',
 		margin: '50px auto',
-		width: '650px',
-		alignItems: 'center',
-		flexDirection: 'column',
+		justifyContent: 'center',
+		alignItems: 'flex-start',
 	},
-	block: {
-		width: '100%',
-		padding: '20px',
+	column: {
 		backgroundColor: '#ddd',
-		borderRadius: '6px',
-		'&:not(&:last-child)': {
-			marginBottom: '20px',
-		},
-	},
-	header: {
 		display: 'flex',
-		justifyContent: 'space-between',
+		padding: GUTTER,
 		alignItems: 'center',
-	},
-	form: {
-		display: 'flex',
-		flexDirection: 'column',
-		'&> *': {
-			width: '100%',
-			'&:not(:last-child)': {
-				marginBottom: '20px',
-			},
-		},
-	},
-	list: {
-		display: 'flex',
-		alignItems: 'center',
-		flexDirection: 'column',
-	},
-	todo: {
-		display: 'flex',
-		backgroundColor: '#eee',
-		width: '100%',
-		padding: '10px',
-		fontSize: 20,
 		borderRadius: '6px',
-		justifyContent: 'space-between',
-		transition: 'all 0.2s',
-		'&:hover': {
-			transform: 'scale(1.02)',
-		},
+
 		'&:not(&:last-child)': {
-			marginBottom: '20px',
+			marginRight: GUTTER,
 		},
 	},
 }));
-
-const DATE_FORMAT = 'YYYY-MM-DD HH:mm';
 
 const MainPage = (props) => {
 	const classes = useStyles();
 	const history = useHistory();
 	const isLogin = useSelector((state) => state.auth.isLogin);
 	const user = useSelector((state) => state.auth.user);
-	const { isWaiting, handleSignOut, list, createTodo } = props;
-
-	// form
-	const [whatToDo, setWhatToDo] = useState('');
-	const [whenToDo, setWhenToDo] = useState(new Date());
-
-	const handleSubmit = async (e) => {
-		e.preventDefault();
-		const params = {
-			value: whatToDo,
-			date: whenToDo,
-		};
-		try {
-			await createTodo(params);
-			setWhatToDo('');
-		} catch (error) {
-			console.error(error);
-		}
-	};
+	const { isWaiting, handleSignOut, list } = props;
 
 	useEffect(() => {
 		if (!isLogin) history.push('/login');
@@ -105,58 +45,13 @@ const MainPage = (props) => {
 	return (
 		<Fragment>
 			<Box className={classes.container}>
-				<Box className={cn(classes.block, classes.header)}>
-					<Button variant="contained" color="secondary" onClick={handleSignOut}>
-						登出
-					</Button>
-					<Button style={{ textTransform: 'none' }}>
-						{user && user.email}
-					</Button>
-				</Box>
-				<Box
-					className={cn(classes.block, classes.form)}
-					component="form"
-					onSubmit={handleSubmit}
-				>
-					<TextField
-						required
-						fullWidth
-						label="事項"
-						variant="outlined"
-						className={classes.input}
-						value={whatToDo}
-						onChange={(e) => {
-							setWhatToDo(e.target.value);
-						}}
-					/>
-					<LocalizationProvider dateAdapter={DateAdapter}>
-						<DateTimePicker
-							label="日期"
-							inputFormat="YYYY-MM-DD HH:mm"
-							value={whenToDo}
-							onChange={setWhenToDo}
-							renderInput={(params) => (
-								<TextField {...params} variant="outlined" />
-							)}
-						/>
-					</LocalizationProvider>
-					<Button fullWidth variant="contained" color="primary" type="submit">
-						CREATE TODO
-					</Button>
-				</Box>
-				{Array.isArray(list) && (
-					<Box className={cn(classes.block, classes.list)}>
-						{list.map((todo) => {
-							const todoObj = querystring.parse(todo);
-							return (
-								<Box className={classes.todo} key={todoObj.createdAt}>
-									<Box>{todoObj.value}</Box>
-									<Box>{dayjs(todoObj.date).format(DATE_FORMAT)}</Box>
-								</Box>
-							);
-						})}
-					</Box>
-				)}
+				<UserInfo
+					columnStyle={classes.column}
+					user={user}
+					handleSignOut={handleSignOut}
+				/>
+				<List columnStyle={classes.column} list={list} />
+				{!false && <Form columnStyle={classes.column} />}
 			</Box>
 			<Backdrop
 				sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
