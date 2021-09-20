@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
 	container: {
 		// backgroundColor: '#faa',
 		display: 'flex',
-		width: '1400px',
+		width: '1300px',
 		margin: '50px auto',
 		justifyContent: 'center',
 		alignItems: 'flex-start',

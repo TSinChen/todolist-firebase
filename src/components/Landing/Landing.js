@@ -20,8 +20,8 @@ const TABS_VALUE = {
 const useStyles = makeStyles((theme) => ({
 	container: {
 		display: 'flex',
-		margin: '100px auto 0',
-		width: '450px',
+		margin: '80px auto 0',
+		width: '400px',
 		alignItems: 'center',
 		flexDirection: 'column',
 	},
@@ -30,15 +30,15 @@ const useStyles = makeStyles((theme) => ({
 		width: '100%',
 	},
 	tab: {
-		fontSize: 22,
+		fontSize: 18,
 		flexGrow: 1,
 	},
 	form: {
 		width: '100%',
-		padding: '20px 0',
+		padding: '15px 0',
 	},
 	input: {
-		margin: '15px 0',
+		margin: '10px 0',
 	},
 }));
 

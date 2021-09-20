@@ -10,7 +10,7 @@ import routes from './constants/routes';
 const store = createStore(reducer);
 const theme = createTheme({
 	typography: {
-		fontSize: 18,
+		fontSize: 16,
 	},
 	overrides: {
 		MuiBackdrop: {

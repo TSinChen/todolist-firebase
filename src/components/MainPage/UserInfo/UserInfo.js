@@ -6,7 +6,7 @@ import { Box, Button } from '@material-ui/core';
 const useStyles = makeStyles((theme) => ({
 	userInfo: {
 		display: 'flex',
-		width: '400px',
+		width: '350px',
 		justifyContent: 'space-between',
 	},
 }));

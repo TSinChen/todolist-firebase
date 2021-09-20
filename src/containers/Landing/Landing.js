@@ -42,6 +42,7 @@ const Landing = () => {
 			history.push('/');
 		} catch (error) {
 			console.error(error);
+			alert(error);
 		} finally {
 			setIsWaiting(false);
 		}

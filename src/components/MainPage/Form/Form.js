@@ -12,7 +12,7 @@ import { GUTTER } from '../../../constants/style';
 const useStyles = makeStyles((theme) => ({
 	form: {
 		display: 'flex',
-		width: '400px',
+		width: '350px',
 		flexDirection: 'column',
 		'& > *': {
 			width: '100%',
