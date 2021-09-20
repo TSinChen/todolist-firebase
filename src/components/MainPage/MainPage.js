@@ -7,7 +7,7 @@ import { Backdrop, Box, CircularProgress } from '@material-ui/core';
 import UserInfo from './UserInfo/UserInfo';
 import List from './List/List';
 import Form from './Form/Form';
-import { GUTTER } from '../../constants/style';
+import { GUTTER, BORDER_RADIUS } from '../../constants/style';
 
 const useStyles = makeStyles((theme) => ({
 	container: {
@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
 		display: 'flex',
 		padding: GUTTER,
 		alignItems: 'center',
-		borderRadius: '6px',
+		borderRadius: BORDER_RADIUS,
 
 		'&:not(&:last-child)': {
 			marginRight: GUTTER,
@@ -36,7 +36,7 @@ const MainPage = (props) => {
 	const history = useHistory();
 	const isLogin = useSelector((state) => state.auth.isLogin);
 	const user = useSelector((state) => state.auth.user);
-	const { isWaiting, handleSignOut, list } = props;
+	const { isWaiting, handleSignOut, list, createTodo, editTodo } = props;
 
 	useEffect(() => {
 		if (!isLogin) history.push('/login');
@@ -50,8 +50,10 @@ const MainPage = (props) => {
 					user={user}
 					handleSignOut={handleSignOut}
 				/>
-				<List columnStyle={classes.column} list={list} />
-				{!false && <Form columnStyle={classes.column} />}
+				<List columnStyle={classes.column} list={list} editTodo={editTodo} />
+				{!false && (
+					<Form columnStyle={classes.column} createTodo={createTodo} />
+				)}
 			</Box>
 			<Backdrop
 				sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}

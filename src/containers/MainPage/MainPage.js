@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { signOut, onAuthStateChanged } from 'firebase/auth';
-import { ref, child, get, set } from 'firebase/database';
+import { ref, child, get, set, push, update } from 'firebase/database';
 import querystring from 'query-string';
 import { auth, db, dbRef } from '../../config/firebase';
 import Layout from '../../components/MainPage/MainPage';
@@ -36,8 +36,10 @@ const MainPage = () => {
 		try {
 			const snapshot = await get(child(dbRef, `users/${user.uid}`));
 			if (snapshot.exists()) {
-				setList(snapshot.val().todos);
-				console.log(snapshot.val().todos);
+				setList(
+					Array.isArray(snapshot.val().todos) &&
+						snapshot.val().todos.map((todo) => querystring.parse(todo))
+				);
 			}
 		} catch (error) {
 			console.error(error);
@@ -53,10 +55,43 @@ const MainPage = () => {
 		try {
 			await set(ref(db, `users/${user.uid}`), {
 				todos: [
-					querystring.stringify({ value, date, createdAt: new Date() }),
-					...(Array.isArray(list) ? list : []),
+					querystring.stringify({
+						value,
+						date,
+						finished: false,
+						deleted: false,
+						createdAt: new Date(),
+						updatedAt: new Date(),
+						finishedAt: null,
+						deletedAt: null,
+					}),
+					...(Array.isArray(list)
+						? list.map((todo) => querystring.stringify(todo))
+						: []),
 				],
 			});
+			await getTodos();
+		} catch (error) {
+			console.error(error);
+			alert(error);
+		} finally {
+			setIsWaiting(false);
+		}
+	};
+
+	const editTodo = async (index, params) => {
+		setIsWaiting(true);
+		try {
+			const snapshot = await get(
+				child(dbRef, `users/${user.uid}/todos/${index}`)
+			);
+			const currentValue = querystring.parse(snapshot.val());
+			const updates = {};
+			updates[`/users/${user.uid}/todos/${index}`] = querystring.stringify({
+				...currentValue,
+				...params,
+			});
+			await update(ref(db), updates);
 			await getTodos();
 		} catch (error) {
 			console.error(error);
@@ -91,6 +126,7 @@ const MainPage = () => {
 			handleSignOut={handleSignOut}
 			list={list}
 			createTodo={createTodo}
+			editTodo={editTodo}
 		/>
 	);
 };
