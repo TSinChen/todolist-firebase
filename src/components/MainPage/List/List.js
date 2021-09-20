@@ -16,7 +16,6 @@ const useStyles = makeStyles((theme) => ({
 		maxHeight: '90vh',
 		flexDirection: 'column',
 		overflowY: 'scroll',
-		paddingTop: 0,
 		'&::-webkit-scrollbar': {
 			width: '0',
 		},
@@ -135,7 +134,7 @@ const List = (props) => {
 	}, [list, statusFilter]);
 
 	return (
-		<Box className={cn(columnStyle, classes.main)}>
+		<Box className={cn(columnStyle, classes.main)} style={{ paddingTop: 0 }}>
 			<Box className={classes.header}>
 				<Box className={classes.toolbar}>
 					<Typography variant="h6">
