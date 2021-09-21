@@ -11,6 +11,11 @@ const createForm = (state = defaultState, action) => {
 				...state,
 				editingIndex: action.payload,
 			};
+		case constants.CLOSE_EDIT_FORM:
+			return {
+				...state,
+				editingIndex: false,
+			};
 		default:
 			return state;
 	}

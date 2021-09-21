@@ -91,19 +91,6 @@ const useStyles = makeStyles((theme) => ({
 			transform: 'scale(1.5)',
 		},
 	},
-	// finished: {
-	// 	position: 'relative',
-	// 	'&::after': {
-	// 		backgroundColor: '#000',
-	// 		position: 'absolute',
-	// 		content: '""',
-	// 		top: '50%',
-	// 		left: '50%',
-	// 		width: '95%',
-	// 		height: '1px',
-	// 		transform: 'translate(-50%, -50%)',
-	// 	},
-	// },
 }));
 
 const STATUS_FILTER_TABS_VALUE = {
@@ -122,10 +109,16 @@ const List = (props) => {
 	const [showList, setShowList] = useState(null);
 
 	const handleCheck = async (index) => {
-		await editTodo(index, {
-			finished: list[index].finished === 'true' ? false : true,
-			finishedAt: new Date(),
-		});
+		const isFinishedCurrent = list[index].finished === 'true';
+		try {
+			await editTodo(index, {
+				finished: isFinishedCurrent ? false : true,
+				finishedAt: isFinishedCurrent ? null : new Date(),
+			});
+		} catch (error) {
+			console.error(error);
+			alert(error);
+		}
 	};
 
 	const handleOpenCreateForm = () => {
@@ -209,7 +202,7 @@ const List = (props) => {
 								</Box>
 								<Edit
 									className={classes.edit}
-									color="default"
+									color="action"
 									onClick={() => setEditingIndex(index)}
 								/>
 							</Box>

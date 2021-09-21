@@ -1,20 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import cn from 'classnames';
 import { makeStyles } from '@material-ui/styles';
 import { Box, Button, TextField } from '@material-ui/core';
 import { LocalizationProvider } from '@mui/lab';
 import DateAdapter from '@mui/lab/AdapterDayjs';
 import { DateTimePicker } from '@mui/lab';
 
-import { CLOSE_CREATE_FORM } from '../../../constants/action';
+import { CLOSE_EDIT_FORM } from '../../../constants/action';
 import { DATE_FORMAT } from '../../../constants/date';
 import { GUTTER } from '../../../constants/style';
 
 const useStyles = makeStyles((theme) => ({
 	form: {
 		display: 'flex',
-		width: `${350 + GUTTER * 2}px`,
 		flexDirection: 'column',
 		'& > *': {
 			width: '100%',
@@ -34,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
 const EditForm = (props) => {
 	const classes = useStyles();
 	const dispatch = useDispatch();
-	const { editTodo, formData } = props;
+	const { editTodo, editingIndex, formData } = props;
 
 	// form
 	const [whatToDo, setWhatToDo] = useState('');
@@ -42,24 +40,27 @@ const EditForm = (props) => {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		const params = {
-			value: whatToDo,
-			date: whenToDo,
-		};
 		try {
+			await editTodo(editingIndex, {
+				value: whatToDo,
+				date: whenToDo,
+			});
+			handleCloseEditForm();
 		} catch (error) {
 			console.error(error);
+			alert(error);
 		}
 	};
 
-	const handleCloseCreateForm = () => {
+	const handleCloseEditForm = () => {
 		dispatch({
-			type: CLOSE_CREATE_FORM,
+			type: CLOSE_EDIT_FORM,
 		});
 	};
 
 	useEffect(() => {
-		console.log(formData);
+		setWhatToDo(formData.value);
+		setWhenToDo(formData.date);
 	}, [formData]);
 
 	return (
@@ -90,12 +91,12 @@ const EditForm = (props) => {
 					fullWidth
 					variant="contained"
 					color="secondary"
-					onClick={handleCloseCreateForm}
+					onClick={handleCloseEditForm}
 				>
-					關閉
+					取消
 				</Button>
 				<Button fullWidth variant="contained" color="primary" type="submit">
-					新增
+					修改
 				</Button>
 			</Box>
 		</Box>

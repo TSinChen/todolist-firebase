@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { signOut, onAuthStateChanged } from 'firebase/auth';
+import { signOut } from 'firebase/auth';
 import { ref, child, get, set, update } from 'firebase/database';
 import querystring from 'query-string';
 import { auth, db, dbRef } from '../../config/firebase';
@@ -89,6 +89,7 @@ const MainPage = () => {
 			const updates = {};
 			updates[`/users/${user.uid}/todos/${index}`] = querystring.stringify({
 				...currentValue,
+				updatedAt: new Date(),
 				...params,
 			});
 			await update(ref(db), updates);
@@ -101,18 +102,21 @@ const MainPage = () => {
 		}
 	};
 
-	onAuthStateChanged(auth, (user) => {
-		if (user) {
-			dispatch({
-				type: LOGIN,
-				payload: user,
-			});
-		} else {
-			dispatch({
-				type: LOGOUT,
-			});
-		}
-	});
+	useEffect(() => {
+		const authListener = auth.onAuthStateChanged((user) => {
+			if (user) {
+				dispatch({
+					type: LOGIN,
+					payload: user,
+				});
+			} else {
+				dispatch({
+					type: LOGOUT,
+				});
+			}
+		});
+		return () => authListener();
+	}, []);
 
 	useEffect(() => {
 		if (user) {

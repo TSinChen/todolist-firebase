@@ -1,7 +1,6 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
-import * as cn from 'classnames';
 import { makeStyles } from '@material-ui/styles';
 import { Backdrop, Box, CircularProgress } from '@material-ui/core';
 
@@ -31,6 +30,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 	formColumn: {
 		display: 'flex',
+		width: '380px',
 		flexDirection: 'column',
 		'& > *': {
 			backgroundColor: '#ddd',
@@ -79,6 +79,7 @@ const MainPage = (props) => {
 					{isEditing && (
 						<EditForm
 							editTodo={editTodo}
+							editingIndex={editingIndex}
 							formData={Number.isInteger(editingIndex) && list[editingIndex]}
 						/>
 					)}
@@ -89,7 +90,7 @@ const MainPage = (props) => {
 			</Box>
 			<Backdrop
 				sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-				isCreating={isWaiting}
+				open={isWaiting}
 			>
 				<CircularProgress color="inherit" />
 			</Backdrop>

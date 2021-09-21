@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import cn from 'classnames';
 import { makeStyles } from '@material-ui/styles';
 import { Box, Button, TextField } from '@material-ui/core';
 import { LocalizationProvider } from '@mui/lab';
@@ -14,7 +13,6 @@ import { GUTTER } from '../../../constants/style';
 const useStyles = makeStyles((theme) => ({
 	form: {
 		display: 'flex',
-		width: `${350 + GUTTER * 2}px`,
 		flexDirection: 'column',
 		'& > *': {
 			width: '100%',
