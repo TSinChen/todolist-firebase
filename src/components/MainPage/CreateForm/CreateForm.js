@@ -14,12 +14,12 @@ import { GUTTER } from '../../../constants/style';
 const useStyles = makeStyles((theme) => ({
 	form: {
 		display: 'flex',
-		width: '350px',
+		width: `${350 + GUTTER * 2}px`,
 		flexDirection: 'column',
 		'& > *': {
 			width: '100%',
 			'&:not(&:last-child)': {
-				marginBottom: GUTTER,
+				marginBottom: `${GUTTER}px`,
 			},
 		},
 	},
@@ -31,10 +31,10 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-const Form = (props) => {
+const CreateForm = (props) => {
 	const classes = useStyles();
 	const dispatch = useDispatch();
-	const { columnStyle, createTodo, createFormOpen } = props;
+	const { createTodo, isCreating } = props;
 
 	// form
 	const [whatToDo, setWhatToDo] = useState('');
@@ -63,15 +63,15 @@ const Form = (props) => {
 
 	return (
 		<Box
-			className={cn(columnStyle, classes.form)}
+			className={classes.form}
 			component="form"
 			onSubmit={handleSubmit}
-			style={{ visibility: !createFormOpen && 'hidden' }}
+			style={{ visibility: !isCreating && 'hidden' }}
 		>
 			<TextField
 				required
 				fullWidth
-				label="事項"
+				label="新事項"
 				variant="outlined"
 				className={classes.input}
 				value={whatToDo}
@@ -106,4 +106,4 @@ const Form = (props) => {
 	);
 };
 
-export default Form;
+export default CreateForm;

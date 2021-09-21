@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { signOut, onAuthStateChanged } from 'firebase/auth';
-import { ref, child, get, set, push, update } from 'firebase/database';
+import { ref, child, get, set, update } from 'firebase/database';
 import querystring from 'query-string';
 import { auth, db, dbRef } from '../../config/firebase';
 import Layout from '../../components/MainPage/MainPage';

@@ -1,2 +1,2 @@
-export const GUTTER = '15px';
-export const BORDER_RADIUS = '6px';
+export const GUTTER = 15;
+export const BORDER_RADIUS = 6;

@@ -1,20 +1,15 @@
 import * as constants from '../constants/action';
 
 const defaultState = {
-	isCreating: false,
+	editingIndex: false, // false: not editing
 };
 
 const createForm = (state = defaultState, action) => {
 	switch (action.type) {
-		case constants.OPEN_CREATE_FORM:
+		case constants.SET_EDITING_INDEX:
 			return {
 				...state,
-				isCreating: true,
-			};
-		case constants.CLOSE_CREATE_FORM:
-			return {
-				...state,
-				isCreating: false,
+				editingIndex: action.payload,
 			};
 		default:
 			return state;

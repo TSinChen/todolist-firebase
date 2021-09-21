@@ -16,11 +16,13 @@ const UserInfo = (props) => {
 	const { columnStyle, user, handleSignOut } = props;
 
 	return (
-		<Box className={cn(columnStyle, classes.userInfo)}>
-			<Button variant="contained" color="secondary" onClick={handleSignOut}>
-				登出
-			</Button>
-			<Button style={{ textTransform: 'none' }}>{user && user.email}</Button>
+		<Box className={columnStyle}>
+			<Box className={classes.userInfo}>
+				<Button variant="contained" color="secondary" onClick={handleSignOut}>
+					登出
+				</Button>
+				<Button style={{ textTransform: 'none' }}>{user && user.email}</Button>
+			</Box>
 		</Box>
 	);
 };

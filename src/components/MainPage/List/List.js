@@ -3,9 +3,17 @@ import { useDispatch } from 'react-redux';
 import cn from 'classnames';
 import dayjs from 'dayjs';
 import { makeStyles } from '@material-ui/styles';
-import { Box, Tabs, Tab, Typography, Button } from '@material-ui/core';
+import {
+	Box,
+	Tabs,
+	Tab,
+	Typography,
+	Button,
+	Checkbox,
+} from '@material-ui/core';
+import { Edit } from '@material-ui/icons';
 
-import { OPEN_CREATE_FORM } from '../../../constants/action';
+import { OPEN_CREATE_FORM, SET_EDITING_INDEX } from '../../../constants/action';
 import { DATE_FORMAT, DATE_FORMAT_YMD } from '../../../constants/date';
 import { GUTTER, BORDER_RADIUS } from '../../../constants/style';
 
@@ -25,20 +33,20 @@ const useStyles = makeStyles((theme) => ({
 		position: 'sticky',
 		top: 0,
 		width: '100%',
-		paddingTop: GUTTER,
+		paddingTop: `${GUTTER}px`,
 		zIndex: 99,
 	},
 	toolbar: {
 		display: 'flex',
-		paddingBottom: GUTTER,
+		paddingBottom: `${GUTTER}px`,
 		justifyContent: 'space-between',
 		alignItems: 'center',
 	},
 	tabs: {
 		backgroundColor: '#eee',
 		width: '100%',
-		marginBottom: GUTTER,
-		borderRadius: BORDER_RADIUS,
+		marginBottom: `${GUTTER}px`,
+		borderRadius: `${BORDER_RADIUS}px`,
 	},
 	tab: {
 		padding: '10px 0',
@@ -54,37 +62,48 @@ const useStyles = makeStyles((theme) => ({
 		width: '100%',
 		padding: '10px',
 		fontSize: 16,
-		borderRadius: BORDER_RADIUS,
+		fontWeight: 'bold',
+		borderRadius: `${BORDER_RADIUS}px`,
 		alignItems: 'center',
-		cursor: 'pointer',
 		transition: 'all 0.2s',
 		'&:not(&:last-child)': {
-			marginBottom: GUTTER,
+			marginBottom: `${GUTTER}px`,
 		},
 		'&:hover': {
 			transform: 'scale(1.03)',
 		},
 	},
 	value: {
-		marginRight: 'auto',
-		width: '70%',
+		marginRight: `${GUTTER}px`,
+		flex: '1',
 		whiteSpace: 'nowrap',
 		textOverflow: 'ellipsis',
 		overflow: 'hidden',
 	},
-	finished: {
-		position: 'relative',
-		'&::after': {
-			backgroundColor: '#000',
-			position: 'absolute',
-			content: '""',
-			top: '50%',
-			left: '50%',
-			width: '95%',
-			height: '1px',
-			transform: 'translate(-50%, -50%)',
+	date: {
+		marginRight: `${GUTTER}px`,
+		whiteSpace: 'nowrap',
+	},
+	edit: {
+		cursor: 'pointer',
+		transition: 'all 0.2s',
+		'&:hover': {
+			transform: 'scale(1.5)',
 		},
 	},
+	// finished: {
+	// 	position: 'relative',
+	// 	'&::after': {
+	// 		backgroundColor: '#000',
+	// 		position: 'absolute',
+	// 		content: '""',
+	// 		top: '50%',
+	// 		left: '50%',
+	// 		width: '95%',
+	// 		height: '1px',
+	// 		transform: 'translate(-50%, -50%)',
+	// 	},
+	// },
 }));
 
 const STATUS_FILTER_TABS_VALUE = {
@@ -112,6 +131,13 @@ const List = (props) => {
 	const handleOpenCreateForm = () => {
 		dispatch({
 			type: OPEN_CREATE_FORM,
+		});
+	};
+
+	const setEditingIndex = (index) => {
+		dispatch({
+			type: SET_EDITING_INDEX,
+			payload: index,
 		});
 	};
 
@@ -171,18 +197,21 @@ const List = (props) => {
 				{Array.isArray(showList) &&
 					showList.map((todo, index) => {
 						return (
-							<Box
-								key={index}
-								className={cn(
-									classes.todo,
-									statusFilter !== STATUS_FILTER_TABS_VALUE.complete.value &&
-										todo.finished === 'true' &&
-										classes.finished
-								)}
-								onClick={() => handleCheck(index)}
-							>
+							<Box key={index} className={classes.todo}>
+								<Checkbox
+									color="primary"
+									checked={todo.finished === 'true'}
+									onChange={() => handleCheck(index)}
+								/>
 								<Box className={classes.value}>{todo.value}</Box>
-								<Box>{dayjs(todo.date).format(DATE_FORMAT)}</Box>
+								<Box className={classes.date}>
+									{dayjs(todo.date).format(DATE_FORMAT)}
+								</Box>
+								<Edit
+									className={classes.edit}
+									color="default"
+									onClick={() => setEditingIndex(index)}
+								/>
 							</Box>
 						);
 					})}
