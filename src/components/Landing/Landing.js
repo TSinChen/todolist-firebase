@@ -36,9 +36,9 @@ const useStyles = makeStyles((theme) => ({
 	form: {
 		width: '100%',
 		padding: '15px 0',
-	},
-	input: {
-		margin: '10px 0',
+		'& > *': {
+			margin: '10px 0',
+		},
 	},
 }));
 
@@ -46,7 +46,7 @@ const Landing = (props) => {
 	const classes = useStyles();
 	const history = useHistory();
 	const isLogin = useSelector((state) => state.auth.isLogin);
-	const { isWaiting, handleRegister, handleLogin } = props;
+	const { isWaiting, handleRegister, handleLogin, handleGoogleLogin } = props;
 	const [loginOrRegister, setLoginOrRegister] = useState(
 		TABS_VALUE.login.value
 	);
@@ -148,6 +148,9 @@ const Landing = (props) => {
 					)}
 					<Button type="submit" fullWidth variant="contained" color="primary">
 						{TABS_VALUE[loginOrRegister].label}
+					</Button>
+					<Button fullWidth color="primary" onClick={handleGoogleLogin}>
+						使用 Google 帳號登入
 					</Button>
 				</Box>
 			</Box>
